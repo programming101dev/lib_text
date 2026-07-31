@@ -1,0 +1,46 @@
+# Project metadata
+set(PROJECT_NAME "p101_text")
+set(PROJECT_VERSION "0.0.1")
+set(PROJECT_DESCRIPTION "Strings, wide text, patterns, regular expressions, and word expansion")
+set(PROJECT_LANGUAGE "C")
+
+set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+
+set(STANDARD_FLAGS
+        -D_POSIX_C_SOURCE=200809L
+        -D_XOPEN_SOURCE=700
+        -Werror
+)
+set(DARWIN_STANDARD_FLAGS -D_DARWIN_C_SOURCE)
+set(LINUX_STANDARD_FLAGS -D_GNU_SOURCE)
+set(BSD_STANDARD_FLAGS -D_BSD_SOURCE -D__BSD_VISIBLE)
+
+set(LIBRARY_TARGETS p101_text)
+set(p101_text_SOURCES
+        src/posix/ctype.c
+        src/posix/regex.c
+        src/posix/string.c
+        src/posix/strings.c
+        src/posix/wchar.c
+        src/posix/wctype.c
+        src/posix/wordexp.c
+        src/posix_xsi/stdlib.c
+        src/posix_xsi/string.c
+        src/posix_xsi/strings.c
+        src/posix_xsi/unistd.c
+        src/posix_xsi/wchar.c
+        src/unix/stdlib.c
+        src/unix/string.c
+)
+set(p101_text_HEADERS
+        include/p101_text/text.h
+)
+set(p101_text_LINK_LIBRARIES
+        p101_error
+        p101_env
+        p101_tool_event
+        p101_c
+)
+
