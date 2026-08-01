@@ -72,9 +72,12 @@ int p101_wordexp(const struct p101_env *env, struct p101_error *err, const char 
 
 void p101_wordfree(const struct p101_env *env, wordexp_t *pwordexp)
 {
+    char resource_id[P101_ENV_POINTER_RESOURCE_ID_SIZE];
+
     P101_TRACE(env);
+    p101_env_pointer_resource_id(resource_id, sizeof(resource_id), pwordexp);
     errno = 0;
     wordfree(pwordexp);
-    P101_TRACK_POINTER_RESOURCE_RELEASE(env, "wordexp-result", pwordexp, NULL);
+    P101_TRACK_RESOURCE_RELEASE(env, "wordexp-result", resource_id, NULL);
     P101_TRACE_EXIT(env);
 }

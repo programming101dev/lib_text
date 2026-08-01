@@ -81,9 +81,12 @@ int p101_regexec(const struct p101_env *env, const regex_t *restrict preg, const
 
 void p101_regfree(const struct p101_env *env, regex_t *preg)
 {
+    char resource_id[P101_ENV_POINTER_RESOURCE_ID_SIZE];
+
     P101_TRACE(env);
+    p101_env_pointer_resource_id(resource_id, sizeof(resource_id), preg);
     errno = 0;
     regfree(preg);
-    P101_TRACK_POINTER_RESOURCE_RELEASE(env, "compiled-regex", preg, NULL);
+    P101_TRACK_RESOURCE_RELEASE(env, "compiled-regex", resource_id, NULL);
     P101_TRACE_EXIT(env);
 }
