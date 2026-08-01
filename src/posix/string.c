@@ -113,7 +113,7 @@ int p101_strerror_r(const struct p101_env *env, struct p101_error *err, int errn
             }
             else
             {
-                size_t n       = strlen(res);
+                size_t n       = p101_strlen(env, res);
                 size_t maxcopy = buflen - 1;
                 size_t copy    = n;
 
@@ -123,7 +123,7 @@ int p101_strerror_r(const struct p101_env *env, struct p101_error *err, int errn
                 }
                 if(copy > 0)
                 {
-                    memcpy(strerrbuf, res, copy);
+                    p101_memcpy(env, strerrbuf, res, copy);
                 }
                 strerrbuf[copy] = '\0';
             }
