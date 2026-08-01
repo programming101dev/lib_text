@@ -15,7 +15,6 @@
  */
 
 #include "p101_text/text.h"
-#include <ctype.h>
 
 int p101_isalnum_l(const struct p101_env *env, int c, locale_t locale)
 {
