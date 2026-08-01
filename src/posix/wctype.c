@@ -173,13 +173,19 @@ int p101_iswxdigit_l(const struct p101_env *env, wint_t wc, locale_t locale)
     return ret_val;
 }
 
-wint_t p101_towctrans_l(const struct p101_env *env, wint_t wc, wctrans_t desc, locale_t locale)
+wint_t p101_towctrans_l(const struct p101_env *env, struct p101_error *err, wint_t wc, wctrans_t desc, locale_t locale)
 {
     wint_t ret_val;
 
     P101_TRACE(env);
+    P101_WRAPPER_FAULT_RETURN(env, err, WEOF);
     errno   = 0;
     ret_val = towctrans_l(wc, desc, locale);
+
+    if(errno != 0)
+    {
+        P101_ERROR_RAISE_ERRNO(err, errno);
+    }
 
     P101_TRACE_EXIT(env);
     return ret_val;

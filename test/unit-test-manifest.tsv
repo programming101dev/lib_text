@@ -6,7 +6,9 @@ p101_strcoll_l	fault	test/test_fault_wrappers.c
 p101_strdup	fault	test/test_fault_wrappers.c
 p101_strerror_r	fault	test/test_fault_wrappers.c
 p101_strndup	fault	test/test_fault_wrappers.c
+p101_strsignal	fault	test/test_fault_wrappers.c
 p101_strxfrm_l	fault	test/test_fault_wrappers.c
+p101_towctrans_l	fault	test/test_fault_wrappers.c
 p101_wcscoll_l	fault	test/test_fault_wrappers.c
 p101_wcsdup	fault	test/test_fault_wrappers.c
 p101_wcsnrtombs	fault	test/test_fault_wrappers.c
@@ -57,12 +59,10 @@ p101_strncasecmp	behavior	test/test_behavior.c
 p101_strncasecmp_l	behavior	test/test_behavior.c
 p101_strnlen	behavior	test/test_behavior.c
 p101_strsep	behavior	test/test_behavior.c
-p101_strsignal	behavior	test/test_behavior.c
 p101_strtok_r	behavior	test/test_behavior.c
 p101_swab	behavior	test/test_behavior.c
 p101_tolower_l	behavior	test/test_behavior.c
 p101_toupper_l	behavior	test/test_behavior.c
-p101_towctrans_l	behavior	test/test_behavior.c
 p101_towlower_l	behavior	test/test_behavior.c
 p101_towupper_l	behavior	test/test_behavior.c
 p101_wcpcpy	behavior	test/test_behavior.c

@@ -82,13 +82,13 @@ extern "C"
     char     *p101_strndup(const struct p101_env *env, struct p101_error *err, const char *s, size_t size) P101_ATTR_MALLOC P101_ATTR_ALLOC_SIZE(4) P101_ATTR_WARN_UNUSED_RESULT;
     size_t    p101_strnlen(const struct p101_env *env, const char *s, size_t maxlen);
     char     *p101_strsep(const struct p101_env *env, char **stringp, const char *delim);
-    char     *p101_strsignal(const struct p101_env *env, int signum);
+    char     *p101_strsignal(const struct p101_env *env, struct p101_error *err, int signum);
     char     *p101_strtok_r(const struct p101_env *env, char *restrict s, const char *restrict sep, char **restrict state);
     size_t    p101_strxfrm_l(const struct p101_env *env, struct p101_error *err, char *restrict s1, const char *restrict s2, size_t n, locale_t locale);
     void      p101_swab(const struct p101_env *env, const void *restrict src, void *restrict dest, ssize_t nbytes);
     int       p101_tolower_l(const struct p101_env *env, int c, locale_t locale);
     int       p101_toupper_l(const struct p101_env *env, int c, locale_t locale);
-    wint_t    p101_towctrans_l(const struct p101_env *env, wint_t wc, wctrans_t desc, locale_t locale);
+    wint_t    p101_towctrans_l(const struct p101_env *env, struct p101_error *err, wint_t wc, wctrans_t desc, locale_t locale);
     wint_t    p101_towlower_l(const struct p101_env *env, wint_t wc, locale_t locale);
     wint_t    p101_towupper_l(const struct p101_env *env, wint_t wc, locale_t locale);
     wchar_t  *p101_wcpcpy(const struct p101_env *env, wchar_t *restrict ws1, const wchar_t *restrict ws2);

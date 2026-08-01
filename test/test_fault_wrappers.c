@@ -2,8 +2,10 @@
 #include <p101_env/env.h>
 #include <p101_error/error.h>
 #include <p101_text/text.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 static int failures;
 
@@ -223,6 +225,33 @@ static void test_p101_strndup(struct p101_env *env, struct p101_error *err)
     p101_env_set_fault_injector(env, NULL, NULL);
 }
 
+/* P101_TEST_CASE(p101_strsignal) */
+static void test_p101_strsignal(struct p101_env *env, struct p101_error *err)
+{
+#ifdef __linux__
+    static const int errors[] = {EIO};
+#elif defined(__APPLE__)
+    static const int errors[] = {EINVAL, ENOMEM};
+#elif defined(__FreeBSD__)
+    static const int errors[] = {EIO};
+#else
+    static const int errors[] = {EIO};
+#endif
+
+    for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
+    {
+        struct fault_state state = {0, errors[index]};
+
+        p101_env_set_fault_injector(env, fail_next_call, &state);
+        char *result = p101_strsignal(env, err, 0);
+        (void)result;
+        EXPECT(state.checks == 1);
+        EXPECT(p101_error_is_errno(err, state.errnum));
+        p101_error_reset(err);
+    }
+    p101_env_set_fault_injector(env, NULL, NULL);
+}
+
 /* P101_TEST_CASE(p101_strxfrm_l) */
 static void test_p101_strxfrm_l(struct p101_env *env, struct p101_error *err)
 {
@@ -250,13 +279,40 @@ static void test_p101_strxfrm_l(struct p101_env *env, struct p101_error *err)
     p101_env_set_fault_injector(env, NULL, NULL);
 }
 
+/* P101_TEST_CASE(p101_towctrans_l) */
+static void test_p101_towctrans_l(struct p101_env *env, struct p101_error *err)
+{
+#ifdef __linux__
+    static const int errors[] = {EINVAL};
+#elif defined(__APPLE__)
+    static const int errors[] = {EIO};
+#elif defined(__FreeBSD__)
+    static const int errors[] = {EIO};
+#else
+    static const int errors[] = {EINVAL};
+#endif
+
+    for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
+    {
+        struct fault_state state = {0, errors[index]};
+
+        p101_env_set_fault_injector(env, fail_next_call, &state);
+        wint_t result = p101_towctrans_l(env, err, 0, 0, (locale_t){0});
+        (void)result;
+        EXPECT(state.checks == 1);
+        EXPECT(p101_error_is_errno(err, state.errnum));
+        p101_error_reset(err);
+    }
+    p101_env_set_fault_injector(env, NULL, NULL);
+}
+
 /* P101_TEST_CASE(p101_wcscoll_l) */
 static void test_p101_wcscoll_l(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
     static const int errors[] = {EINVAL};
 #elif defined(__APPLE__)
-    static const int errors[] = {EILSEQ, ENOMEM};
+    static const int errors[] = {EIO};
 #elif defined(__FreeBSD__)
     static const int errors[] = {EINVAL};
 #else
@@ -364,7 +420,7 @@ static void test_p101_wctrans_l(struct p101_env *env, struct p101_error *err)
 #ifdef __linux__
     static const int errors[] = {EINVAL};
 #elif defined(__APPLE__)
-    static const int errors[] = {EINVAL};
+    static const int errors[] = {EIO};
 #elif defined(__FreeBSD__)
     static const int errors[] = {EIO};
 #else
@@ -462,7 +518,9 @@ int main(void)
     test_p101_strdup(env, err);
     test_p101_strerror_r(env, err);
     test_p101_strndup(env, err);
+    test_p101_strsignal(env, err);
     test_p101_strxfrm_l(env, err);
+    test_p101_towctrans_l(env, err);
     test_p101_wcscoll_l(env, err);
     test_p101_wcsdup(env, err);
     test_p101_wcsnrtombs(env, err);

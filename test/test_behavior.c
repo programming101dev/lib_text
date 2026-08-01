@@ -57,7 +57,7 @@ static void test_ctype(const struct p101_env *env, locale_t locale)
     EXPECT(p101_toupper_l(env, 'a', locale) == toupper_l('a', locale));
 }
 
-static void test_wctype(const struct p101_env *env, locale_t locale)
+static void test_wctype(const struct p101_env *env, struct p101_error *err, locale_t locale)
 {
     wctype_t  character_class = wctype("alpha");
     wctrans_t transform       = wctrans("tolower");
@@ -89,14 +89,14 @@ static void test_wctype(const struct p101_env *env, locale_t locale)
     /* P101_TEST_CASE(p101_iswxdigit_l) */
     EXPECT(p101_iswxdigit_l(env, L'f', locale) == iswxdigit_l(L'f', locale));
     /* P101_TEST_CASE(p101_towctrans_l) */
-    EXPECT(p101_towctrans_l(env, L'A', transform, locale) == towctrans_l(L'A', transform, locale));
+    EXPECT(p101_towctrans_l(env, err, L'A', transform, locale) == towctrans_l(L'A', transform, locale));
     /* P101_TEST_CASE(p101_towlower_l) */
     EXPECT(p101_towlower_l(env, L'A', locale) == towlower_l(L'A', locale));
     /* P101_TEST_CASE(p101_towupper_l) */
     EXPECT(p101_towupper_l(env, L'a', locale) == towupper_l(L'a', locale));
 }
 
-static void test_narrow_strings(const struct p101_env *env, locale_t locale)
+static void test_narrow_strings(const struct p101_env *env, struct p101_error *err, locale_t locale)
 {
     char          destination[32];
     char          second[32];
@@ -144,7 +144,7 @@ static void test_narrow_strings(const struct p101_env *env, locale_t locale)
     /* P101_TEST_CASE(p101_strsep) */
     EXPECT(strcmp(p101_strsep(env, &cursor, ":"), "left") == 0);
     /* P101_TEST_CASE(p101_strsignal) */
-    EXPECT(p101_strsignal(env, SIGTERM) != NULL);
+    EXPECT(p101_strsignal(env, err, SIGTERM) != NULL);
     /* P101_TEST_CASE(p101_strtok_r) */
     EXPECT(strcmp(p101_strtok_r(env, token_text, ",", &state), "alpha") == 0);
     /* P101_TEST_CASE(p101_swab) */
@@ -231,8 +231,8 @@ int main(void)
     if(locale != (locale_t)0)
     {
         test_ctype(env, locale);
-        test_wctype(env, locale);
-        test_narrow_strings(env, locale);
+        test_wctype(env, err, locale);
+        test_narrow_strings(env, err, locale);
         freelocale(locale);
     }
     test_wide_strings(env);
