@@ -192,7 +192,7 @@ static void test_regex_and_wordexp(const struct p101_env *env, struct p101_error
     if(result == 0)
     {
         /* P101_TEST_CASE(p101_regexec) */
-        EXPECT(p101_regexec(env, &expression, "abc", 1, &match, 0) == 0);
+        EXPECT(p101_regexec(env, err, &expression, "abc", 1, &match, 0) == 0);
         /* P101_TEST_CASE(p101_regerror) */
         length = p101_regerror(env, REG_NOMATCH, &expression, message, sizeof(message));
         EXPECT(length > 0);

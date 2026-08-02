@@ -23,7 +23,7 @@ int p101_regcomp(const struct p101_env *env, struct p101_error *err, regex_t *re
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, REG_ESPACE);
+    P101_WRAPPER_FAULT_RETURN_SYSTEM_CODE(env, err);
     errno   = 0;
     ret_val = regcomp(preg, pattern, cflags);
 
@@ -67,13 +67,19 @@ size_t p101_regerror(const struct p101_env *env, int errcode, const regex_t *res
     return ret_val;
 }
 
-int p101_regexec(const struct p101_env *env, const regex_t *restrict preg, const char *restrict string, size_t nmatch, regmatch_t pmatch[restrict], int eflags)
+int p101_regexec(const struct p101_env *env, struct p101_error *err, const regex_t *restrict preg, const char *restrict string, size_t nmatch, regmatch_t pmatch[restrict], int eflags)
 {
     int ret_val;
 
     P101_TRACE(env);
+    P101_WRAPPER_FAULT_RETURN_SYSTEM_CODE(env, err);
     errno   = 0;
     ret_val = regexec(preg, string, nmatch, pmatch, eflags);
+
+    if(ret_val != 0 && ret_val != REG_NOMATCH)
+    {
+        P101_ERROR_RAISE_SYSTEM(err, "Regular expression execution failed", ret_val);
+    }
 
     P101_TRACE_EXIT(env);
     return ret_val;

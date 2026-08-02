@@ -65,7 +65,7 @@ extern "C"
     FILE     *p101_open_wmemstream(const struct p101_env *env, struct p101_error *err, wchar_t **bufp, size_t *sizep) P101_ATTR_WARN_UNUSED_RESULT;
     int       p101_regcomp(const struct p101_env *env, struct p101_error *err, regex_t *restrict preg, const char *restrict pattern, int cflags);
     size_t    p101_regerror(const struct p101_env *env, int errcode, const regex_t *restrict preg, char *restrict errbuf, size_t errbuf_size);
-    int       p101_regexec(const struct p101_env *env, const regex_t *restrict preg, const char *restrict string, size_t nmatch, regmatch_t pmatch[restrict], int eflags);
+    int       p101_regexec(const struct p101_env *env, struct p101_error *err, const regex_t *restrict preg, const char *restrict string, size_t nmatch, regmatch_t pmatch[restrict], int eflags);
     void      p101_regfree(const struct p101_env *env, regex_t *preg);
     int       p101_rpmatch(const struct p101_env *env, const char *response);
     char     *p101_stpcpy(const struct p101_env *env, char *restrict s1, const char *restrict s2);

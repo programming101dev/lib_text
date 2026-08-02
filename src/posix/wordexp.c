@@ -53,7 +53,7 @@ int p101_wordexp(const struct p101_env *env, struct p101_error *err, const char 
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, WRDE_NOSPACE);
+    P101_WRAPPER_FAULT_RETURN_SYSTEM_CODE(env, err);
     errno   = 0;
     ret_val = wordexp(words, pwordexp, flags);
 

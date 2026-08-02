@@ -2,6 +2,7 @@ function	test_kind	test_source
 p101_mbsnrtowcs	fault	test/test_fault_wrappers.c
 p101_open_wmemstream	fault	test/test_fault_wrappers.c
 p101_regcomp	fault	test/test_fault_wrappers.c
+p101_regexec	fault	test/test_fault_wrappers.c
 p101_strcoll_l	fault	test/test_fault_wrappers.c
 p101_strdup	fault	test/test_fault_wrappers.c
 p101_strerror_r	fault	test/test_fault_wrappers.c
@@ -46,7 +47,6 @@ p101_isxdigit_l	behavior	test/test_behavior.c
 p101_l64a	behavior	test/test_behavior.c
 p101_memccpy	behavior	test/test_behavior.c
 p101_regerror	behavior	test/test_behavior.c
-p101_regexec	behavior	test/test_behavior.c
 p101_regfree	behavior	test/test_behavior.c
 p101_rpmatch	behavior	test/test_behavior.c
 p101_stpcpy	behavior	test/test_behavior.c
