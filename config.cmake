@@ -40,7 +40,6 @@ set(p101_text_HEADERS
 set(p101_text_LINK_LIBRARIES
         p101_error
         p101_env
-        p101_tool_event
         p101_c
 )
 
