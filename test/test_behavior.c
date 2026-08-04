@@ -182,15 +182,16 @@ static void test_regex_and_wordexp(const struct p101_env *env, struct p101_error
     regex_t    expression;
     regmatch_t match;
     wordexp_t  words = {0};
-    char       message[128];
     int        result;
-    size_t     length;
 
     result = p101_regcomp(env, err, &expression, "^a.*c$", REG_EXTENDED);
     EXPECT(result == 0);
     EXPECT(p101_error_has_no_error(err));
     if(result == 0)
     {
+        char   message[128];
+        size_t length;
+
         /* P101_TEST_CASE(p101_regexec) */
         EXPECT(p101_regexec(env, err, &expression, "abc", 1, &match, 0) == 0);
         /* P101_TEST_CASE(p101_regerror) */
