@@ -127,8 +127,8 @@ static void test_p101_mbsnrtowcs(struct p101_env *env, struct p101_error *err)
     memset(argument_6, 0xA5, sizeof(argument_6));
     memcpy(argument_6_before, argument_6, sizeof(argument_6));
 #ifdef __linux__
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EILSEQ, EINVAL};
+    static const char *const error_names[] = {"EILSEQ", "EINVAL"};
 #elif defined(__APPLE__)
     static const int         errors[]      = {EILSEQ, EINVAL};
     static const char *const error_names[] = {"EILSEQ", "EINVAL"};
@@ -177,8 +177,8 @@ static void test_p101_open_wmemstream(struct p101_env *env, struct p101_error *e
     memset(argument_3, 0xA5, sizeof(argument_3));
     memcpy(argument_3_before, argument_3, sizeof(argument_3));
 #ifdef __linux__
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL, EMFILE, ENOMEM};
+    static const char *const error_names[] = {"EINVAL", "EMFILE", "ENOMEM"};
 #elif defined(__APPLE__)
     static const int         errors[]      = {EINVAL, ENOMEM};
     static const char *const error_names[] = {"EINVAL", "ENOMEM"};
@@ -316,11 +316,11 @@ static void test_p101_strcoll_l(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #else
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
@@ -356,11 +356,11 @@ static void test_p101_strdup(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {ENOMEM};
     static const char *const error_names[] = {"ENOMEM"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #else
     static const int         errors[]      = {ENOMEM};
     static const char *const error_names[] = {"ENOMEM"};
@@ -400,11 +400,11 @@ static void test_p101_strerror_r(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {EINVAL, ERANGE};
     static const char *const error_names[] = {"EINVAL", "ERANGE"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL, ERANGE};
+    static const char *const error_names[] = {"EINVAL", "ERANGE"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL, ERANGE};
+    static const char *const error_names[] = {"EINVAL", "ERANGE"};
 #else
     static const int         errors[]      = {EINVAL, ERANGE};
     static const char *const error_names[] = {"EINVAL", "ERANGE"};
@@ -441,11 +441,11 @@ static void test_p101_strndup(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {ENOMEM};
     static const char *const error_names[] = {"ENOMEM"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #else
     static const int         errors[]      = {ENOMEM};
     static const char *const error_names[] = {"ENOMEM"};
@@ -525,11 +525,11 @@ static void test_p101_strxfrm_l(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #else
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
@@ -566,11 +566,11 @@ static void test_p101_towctrans_l(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #else
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
@@ -606,8 +606,8 @@ static void test_p101_wcscoll_l(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__FreeBSD__)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
@@ -646,11 +646,11 @@ static void test_p101_wcsdup(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {ENOMEM};
     static const char *const error_names[] = {"ENOMEM"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #else
     static const int         errors[]      = {ENOMEM};
     static const char *const error_names[] = {"ENOMEM"};
@@ -691,8 +691,8 @@ static void test_p101_wcsnrtombs(struct p101_env *env, struct p101_error *err)
     memset(argument_6, 0xA5, sizeof(argument_6));
     memcpy(argument_6_before, argument_6, sizeof(argument_6));
 #ifdef __linux__
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EILSEQ, EINVAL};
+    static const char *const error_names[] = {"EILSEQ", "EINVAL"};
 #elif defined(__APPLE__)
     static const int         errors[]      = {EILSEQ, EINVAL};
     static const char *const error_names[] = {"EILSEQ", "EINVAL"};
@@ -740,8 +740,8 @@ static void test_p101_wcsxfrm_l(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__FreeBSD__)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
@@ -781,11 +781,11 @@ static void test_p101_wctrans_l(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #else
     static const int         errors[]      = {EINVAL};
     static const char *const error_names[] = {"EINVAL"};

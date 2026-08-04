@@ -178,7 +178,7 @@ wint_t p101_towctrans_l(const struct p101_env *env, struct p101_error *err, wint
     wint_t ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, WEOF);
+    P101_WRAPPER_FAULT_RETURN(env, err, ret_val, WEOF);
     errno   = 0;
     ret_val = towctrans_l(wc, desc, locale);
 
@@ -187,7 +187,7 @@ wint_t p101_towctrans_l(const struct p101_env *env, struct p101_error *err, wint
         P101_ERROR_RAISE_ERRNO(err, errno);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -220,7 +220,7 @@ wctrans_t p101_wctrans_l(const struct p101_env *env, struct p101_error *err, con
     wctrans_t ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, 0);
+    P101_WRAPPER_FAULT_RETURN(env, err, ret_val, 0);
     errno   = 0;
     ret_val = wctrans_l(charclass, locale);
 
@@ -229,7 +229,7 @@ wctrans_t p101_wctrans_l(const struct p101_env *env, struct p101_error *err, con
         P101_ERROR_RAISE_ERRNO(err, errno == 0 ? EINVAL : errno);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -238,7 +238,7 @@ wctype_t p101_wctype_l(const struct p101_env *env, struct p101_error *err, const
     wctype_t ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, 0);
+    P101_WRAPPER_FAULT_RETURN(env, err, ret_val, 0);
     errno   = 0;
     ret_val = wctype_l(property, locale);
 
@@ -247,6 +247,6 @@ wctype_t p101_wctype_l(const struct p101_env *env, struct p101_error *err, const
         P101_ERROR_RAISE_ERRNO(err, errno == 0 ? EINVAL : errno);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }

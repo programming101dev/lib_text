@@ -52,7 +52,7 @@ int p101_strcoll_l(const struct p101_env *env, struct p101_error *err, const cha
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, 0);
+    P101_WRAPPER_FAULT_RETURN(env, err, ret_val, 0);
     errno   = 0;
     ret_val = strcoll_l(s1, s2, locale);
 
@@ -61,7 +61,7 @@ int p101_strcoll_l(const struct p101_env *env, struct p101_error *err, const cha
         P101_ERROR_RAISE_ERRNO(err, errno);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -70,7 +70,7 @@ char *p101_strdup(const struct p101_env *env, struct p101_error *err, const char
     char *ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, NULL);
+    P101_WRAPPER_FAULT_RETURN(env, err, ret_val, NULL);
     errno   = 0;
     ret_val = strdup(s);
 
@@ -83,7 +83,7 @@ char *p101_strdup(const struct p101_env *env, struct p101_error *err, const char
         P101_TRACK_ALLOC(env, ret_val, p101_strlen(env, s) + 1U);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -92,7 +92,7 @@ int p101_strerror_r(const struct p101_env *env, struct p101_error *err, int errn
     int ret_val = 0;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, -1);
+    P101_WRAPPER_FAULT_RETURN(env, err, ret_val, -1);
     errno = 0;
 
 #if defined(__GLIBC__) && defined(_GNU_SOURCE)
@@ -144,7 +144,7 @@ int p101_strerror_r(const struct p101_env *env, struct p101_error *err, int errn
         P101_ERROR_RAISE_ERRNO(err, errno);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -153,7 +153,7 @@ char *p101_strndup(const struct p101_env *env, struct p101_error *err, const cha
     char *ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, NULL);
+    P101_WRAPPER_FAULT_RETURN(env, err, ret_val, NULL);
     errno   = 0;
     ret_val = strndup(s, size);
 
@@ -166,7 +166,7 @@ char *p101_strndup(const struct p101_env *env, struct p101_error *err, const cha
         P101_TRACK_ALLOC(env, ret_val, p101_strnlen(env, s, size) + 1U);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -187,7 +187,7 @@ char *p101_strsignal(const struct p101_env *env, struct p101_error *err, int sig
     char *ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, NULL);
+    P101_WRAPPER_FAULT_RETURN(env, err, ret_val, NULL);
     errno   = 0;
     ret_val = strsignal(signum);
 
@@ -196,7 +196,7 @@ char *p101_strsignal(const struct p101_env *env, struct p101_error *err, int sig
         P101_ERROR_RAISE_ERRNO(err, errno);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
@@ -217,7 +217,7 @@ size_t p101_strxfrm_l(const struct p101_env *env, struct p101_error *err, char *
     size_t ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN(env, err, 0);
+    P101_WRAPPER_FAULT_RETURN(env, err, ret_val, 0);
     errno   = 0;
     ret_val = strxfrm_l(s1, s2, n, locale);
 
@@ -226,6 +226,6 @@ size_t p101_strxfrm_l(const struct p101_env *env, struct p101_error *err, char *
         P101_ERROR_RAISE_ERRNO(err, errno);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }

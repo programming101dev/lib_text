@@ -53,7 +53,7 @@ int p101_wordexp(const struct p101_env *env, struct p101_error *err, const char 
     int ret_val;
 
     P101_TRACE(env);
-    P101_WRAPPER_FAULT_RETURN_SYSTEM_CODE(env, err);
+    P101_WRAPPER_FAULT_RETURN_SYSTEM_CODE(env, err, ret_val);
     errno   = 0;
     ret_val = wordexp(words, pwordexp, flags);
 
@@ -66,7 +66,7 @@ int p101_wordexp(const struct p101_env *env, struct p101_error *err, const char 
         P101_TRACK_POINTER_RESOURCE_ACQUIRE(env, "wordexp-result", pwordexp, 0U, NULL);
     }
 
-    P101_TRACE_EXIT(env);
+    P101_WRAPPER_DONE(env);
     return ret_val;
 }
 
