@@ -42,7 +42,6 @@
  */
 
 #include <p101_c/p101_stdlib.h>
-#include <p101_env/wrapper.h>
 
 int p101_regcomp(const struct p101_env *env, struct p101_error *err, regex_t *restrict preg, const char *restrict pattern, int cflags)
 {
