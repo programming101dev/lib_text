@@ -19,20 +19,7 @@ set(BSD_STANDARD_FLAGS -D_BSD_SOURCE -D__BSD_VISIBLE)
 
 set(LIBRARY_TARGETS p101_text)
 set(p101_text_SOURCES
-        src/posix/ctype.c
-        src/posix/regex.c
-        src/posix/string.c
-        src/posix/strings.c
-        src/posix/wchar.c
-        src/posix/wctype.c
-        src/posix/wordexp.c
-        src/posix_xsi/stdlib.c
-        src/posix_xsi/string.c
-        src/posix_xsi/strings.c
-        src/posix_xsi/unistd.c
-        src/posix_xsi/wchar.c
-        src/unix/stdlib.c
-        src/unix/string.c
+        src/text.c
 )
 set(p101_text_HEADERS
         include/p101_text/text.h

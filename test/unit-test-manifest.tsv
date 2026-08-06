@@ -1,75 +1,75 @@
-function	test_kind	test_source
-p101_mbsnrtowcs	fault	test/test_fault_wrappers.c
-p101_open_wmemstream	fault	test/test_fault_wrappers.c
-p101_regcomp	fault	test/test_fault_wrappers.c
-p101_regexec	fault	test/test_fault_wrappers.c
-p101_strcoll_l	fault	test/test_fault_wrappers.c
-p101_strdup	fault	test/test_fault_wrappers.c
-p101_strerror_r	fault	test/test_fault_wrappers.c
-p101_strndup	fault	test/test_fault_wrappers.c
-p101_strsignal	fault	test/test_fault_wrappers.c
-p101_strxfrm_l	fault	test/test_fault_wrappers.c
-p101_towctrans_l	fault	test/test_fault_wrappers.c
-p101_wcscoll_l	fault	test/test_fault_wrappers.c
-p101_wcsdup	fault	test/test_fault_wrappers.c
-p101_wcsnrtombs	fault	test/test_fault_wrappers.c
-p101_wcsxfrm_l	fault	test/test_fault_wrappers.c
-p101_wctrans_l	fault	test/test_fault_wrappers.c
-p101_wctype_l	fault	test/test_fault_wrappers.c
-p101_wordexp	fault	test/test_fault_wrappers.c
-p101_a64l	behavior	test/test_behavior.c
-p101_ffs	behavior	test/test_behavior.c
-p101_isalnum_l	behavior	test/test_behavior.c
-p101_isalpha_l	behavior	test/test_behavior.c
-p101_isblank_l	behavior	test/test_behavior.c
-p101_iscntrl_l	behavior	test/test_behavior.c
-p101_isdigit_l	behavior	test/test_behavior.c
-p101_isgraph_l	behavior	test/test_behavior.c
-p101_islower_l	behavior	test/test_behavior.c
-p101_isprint_l	behavior	test/test_behavior.c
-p101_ispunct_l	behavior	test/test_behavior.c
-p101_isspace_l	behavior	test/test_behavior.c
-p101_isupper_l	behavior	test/test_behavior.c
-p101_iswalnum_l	behavior	test/test_behavior.c
-p101_iswalpha_l	behavior	test/test_behavior.c
-p101_iswblank_l	behavior	test/test_behavior.c
-p101_iswcntrl_l	behavior	test/test_behavior.c
-p101_iswctype_l	behavior	test/test_behavior.c
-p101_iswdigit_l	behavior	test/test_behavior.c
-p101_iswgraph_l	behavior	test/test_behavior.c
-p101_iswlower_l	behavior	test/test_behavior.c
-p101_iswprint_l	behavior	test/test_behavior.c
-p101_iswpunct_l	behavior	test/test_behavior.c
-p101_iswspace_l	behavior	test/test_behavior.c
-p101_iswupper_l	behavior	test/test_behavior.c
-p101_iswxdigit_l	behavior	test/test_behavior.c
-p101_isxdigit_l	behavior	test/test_behavior.c
-p101_l64a	behavior	test/test_behavior.c
-p101_memccpy	behavior	test/test_behavior.c
-p101_regerror	behavior	test/test_behavior.c
-p101_regfree	behavior	test/test_behavior.c
-p101_rpmatch	behavior	test/test_behavior.c
-p101_stpcpy	behavior	test/test_behavior.c
-p101_stpncpy	behavior	test/test_behavior.c
-p101_strcasecmp	behavior	test/test_behavior.c
-p101_strcasecmp_l	behavior	test/test_behavior.c
-p101_strcasestr	behavior	test/test_behavior.c
-p101_strchrnul	behavior	test/test_behavior.c
-p101_strncasecmp	behavior	test/test_behavior.c
-p101_strncasecmp_l	behavior	test/test_behavior.c
-p101_strnlen	behavior	test/test_behavior.c
-p101_strsep	behavior	test/test_behavior.c
-p101_strtok_r	behavior	test/test_behavior.c
-p101_swab	behavior	test/test_behavior.c
-p101_tolower_l	behavior	test/test_behavior.c
-p101_toupper_l	behavior	test/test_behavior.c
-p101_towlower_l	behavior	test/test_behavior.c
-p101_towupper_l	behavior	test/test_behavior.c
-p101_wcpcpy	behavior	test/test_behavior.c
-p101_wcpncpy	behavior	test/test_behavior.c
-p101_wcscasecmp	behavior	test/test_behavior.c
-p101_wcsncasecmp	behavior	test/test_behavior.c
-p101_wcsnlen	behavior	test/test_behavior.c
-p101_wcswidth	behavior	test/test_behavior.c
-p101_wcwidth	behavior	test/test_behavior.c
-p101_wordfree	behavior	test/test_behavior.c
+function	function_usr	test_kind	test_source
+p101_mbsnrtowcs	c:@F@p101_mbsnrtowcs	fault	test/test_fault_wrappers.c
+p101_open_wmemstream	c:@F@p101_open_wmemstream	fault	test/test_fault_wrappers.c
+p101_regcomp	c:@F@p101_regcomp	fault	test/test_fault_wrappers.c
+p101_regexec	c:@F@p101_regexec	fault	test/test_fault_wrappers.c
+p101_strcoll_l	c:@F@p101_strcoll_l	fault	test/test_fault_wrappers.c
+p101_strdup	c:@F@p101_strdup	fault	test/test_fault_wrappers.c
+p101_strerror_r	c:@F@p101_strerror_r	fault	test/test_fault_wrappers.c
+p101_strndup	c:@F@p101_strndup	fault	test/test_fault_wrappers.c
+p101_strsignal	c:@F@p101_strsignal	fault	test/test_fault_wrappers.c
+p101_strxfrm_l	c:@F@p101_strxfrm_l	fault	test/test_fault_wrappers.c
+p101_towctrans_l	c:@F@p101_towctrans_l	fault	test/test_fault_wrappers.c
+p101_wcscoll_l	c:@F@p101_wcscoll_l	fault	test/test_fault_wrappers.c
+p101_wcsdup	c:@F@p101_wcsdup	fault	test/test_fault_wrappers.c
+p101_wcsnrtombs	c:@F@p101_wcsnrtombs	fault	test/test_fault_wrappers.c
+p101_wcsxfrm_l	c:@F@p101_wcsxfrm_l	fault	test/test_fault_wrappers.c
+p101_wctrans_l	c:@F@p101_wctrans_l	fault	test/test_fault_wrappers.c
+p101_wctype_l	c:@F@p101_wctype_l	fault	test/test_fault_wrappers.c
+p101_wordexp	c:@F@p101_wordexp	fault	test/test_fault_wrappers.c
+p101_a64l	c:@F@p101_a64l	behavior	test/test_behavior.c
+p101_ffs	c:@F@p101_ffs	behavior	test/test_behavior.c
+p101_isalnum_l	c:@F@p101_isalnum_l	behavior	test/test_behavior.c
+p101_isalpha_l	c:@F@p101_isalpha_l	behavior	test/test_behavior.c
+p101_isblank_l	c:@F@p101_isblank_l	behavior	test/test_behavior.c
+p101_iscntrl_l	c:@F@p101_iscntrl_l	behavior	test/test_behavior.c
+p101_isdigit_l	c:@F@p101_isdigit_l	behavior	test/test_behavior.c
+p101_isgraph_l	c:@F@p101_isgraph_l	behavior	test/test_behavior.c
+p101_islower_l	c:@F@p101_islower_l	behavior	test/test_behavior.c
+p101_isprint_l	c:@F@p101_isprint_l	behavior	test/test_behavior.c
+p101_ispunct_l	c:@F@p101_ispunct_l	behavior	test/test_behavior.c
+p101_isspace_l	c:@F@p101_isspace_l	behavior	test/test_behavior.c
+p101_isupper_l	c:@F@p101_isupper_l	behavior	test/test_behavior.c
+p101_iswalnum_l	c:@F@p101_iswalnum_l	behavior	test/test_behavior.c
+p101_iswalpha_l	c:@F@p101_iswalpha_l	behavior	test/test_behavior.c
+p101_iswblank_l	c:@F@p101_iswblank_l	behavior	test/test_behavior.c
+p101_iswcntrl_l	c:@F@p101_iswcntrl_l	behavior	test/test_behavior.c
+p101_iswctype_l	c:@F@p101_iswctype_l	behavior	test/test_behavior.c
+p101_iswdigit_l	c:@F@p101_iswdigit_l	behavior	test/test_behavior.c
+p101_iswgraph_l	c:@F@p101_iswgraph_l	behavior	test/test_behavior.c
+p101_iswlower_l	c:@F@p101_iswlower_l	behavior	test/test_behavior.c
+p101_iswprint_l	c:@F@p101_iswprint_l	behavior	test/test_behavior.c
+p101_iswpunct_l	c:@F@p101_iswpunct_l	behavior	test/test_behavior.c
+p101_iswspace_l	c:@F@p101_iswspace_l	behavior	test/test_behavior.c
+p101_iswupper_l	c:@F@p101_iswupper_l	behavior	test/test_behavior.c
+p101_iswxdigit_l	c:@F@p101_iswxdigit_l	behavior	test/test_behavior.c
+p101_isxdigit_l	c:@F@p101_isxdigit_l	behavior	test/test_behavior.c
+p101_l64a	c:@F@p101_l64a	behavior	test/test_behavior.c
+p101_memccpy	c:@F@p101_memccpy	behavior	test/test_behavior.c
+p101_regerror	c:@F@p101_regerror	behavior	test/test_behavior.c
+p101_regfree	c:@F@p101_regfree	behavior	test/test_behavior.c
+p101_rpmatch	c:@F@p101_rpmatch	behavior	test/test_behavior.c
+p101_stpcpy	c:@F@p101_stpcpy	behavior	test/test_behavior.c
+p101_stpncpy	c:@F@p101_stpncpy	behavior	test/test_behavior.c
+p101_strcasecmp	c:@F@p101_strcasecmp	behavior	test/test_behavior.c
+p101_strcasecmp_l	c:@F@p101_strcasecmp_l	behavior	test/test_behavior.c
+p101_strcasestr	c:@F@p101_strcasestr	behavior	test/test_behavior.c
+p101_strchrnul	c:@F@p101_strchrnul	behavior	test/test_behavior.c
+p101_strncasecmp	c:@F@p101_strncasecmp	behavior	test/test_behavior.c
+p101_strncasecmp_l	c:@F@p101_strncasecmp_l	behavior	test/test_behavior.c
+p101_strnlen	c:@F@p101_strnlen	behavior	test/test_behavior.c
+p101_strsep	c:@F@p101_strsep	behavior	test/test_behavior.c
+p101_strtok_r	c:@F@p101_strtok_r	behavior	test/test_behavior.c
+p101_swab	c:@F@p101_swab	behavior	test/test_behavior.c
+p101_tolower_l	c:@F@p101_tolower_l	behavior	test/test_behavior.c
+p101_toupper_l	c:@F@p101_toupper_l	behavior	test/test_behavior.c
+p101_towlower_l	c:@F@p101_towlower_l	behavior	test/test_behavior.c
+p101_towupper_l	c:@F@p101_towupper_l	behavior	test/test_behavior.c
+p101_wcpcpy	c:@F@p101_wcpcpy	behavior	test/test_behavior.c
+p101_wcpncpy	c:@F@p101_wcpncpy	behavior	test/test_behavior.c
+p101_wcscasecmp	c:@F@p101_wcscasecmp	behavior	test/test_behavior.c
+p101_wcsncasecmp	c:@F@p101_wcsncasecmp	behavior	test/test_behavior.c
+p101_wcsnlen	c:@F@p101_wcsnlen	behavior	test/test_behavior.c
+p101_wcswidth	c:@F@p101_wcswidth	behavior	test/test_behavior.c
+p101_wcwidth	c:@F@p101_wcwidth	behavior	test/test_behavior.c
+p101_wordfree	c:@F@p101_wordfree	behavior	test/test_behavior.c
