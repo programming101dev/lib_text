@@ -237,10 +237,12 @@ wctrans_t p101_wctrans_l(const struct p101_env *env, struct p101_error *err, con
      * wctrans_t is a pointer type on some platforms and an integer type on
      * others, so the "no mapping" value cannot be spelled as 0 or NULL
      * portably. A zero-initialized static of the same type is the null
-     * mapping on either kind of platform.
+     * mapping on either kind of platform. It is not const: a const object
+     * with no initializer is a constraint violation in C++ and clang
+     * rejects it here (-Wdefault-const-init-var).
      */
-    static const wctrans_t no_mapping;
-    wctrans_t              ret_val;
+    static wctrans_t no_mapping;
+    wctrans_t        ret_val;
 
     P101_TRACE(env);
     P101_WRAPPER_FAULT_RETURN(env, err, ret_val, no_mapping);
