@@ -1892,7 +1892,8 @@ static void test_p101_wctrans_l(struct p101_env *env, struct p101_error *err)
         EXPECT(state.checks == 1);
         EXPECT(p101_error_is_errno(err, state.code));
         EXPECT(errno == P101_TEST_ERRNO_SENTINEL);
-        EXPECT(result == (0));
+        static wctrans_t expected_failure;
+        EXPECT(result == expected_failure);
         EXPECT(fault_resource_events == 0U);
         write_outcome("p101_wctrans_l", "errno", error_names[index], state.code, failures == failures_before);
         p101_error_reset(err);
