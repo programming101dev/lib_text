@@ -15,6 +15,7 @@
  */
 
 #include "p101_text/p101_regex.h"
+#include <p101_env/resource_classes.h>
 #include <p101_env/wrapper.h>
 
 /*
@@ -76,7 +77,7 @@ int p101_regcomp(const struct p101_env *env, struct p101_error *err, regex_t *re
     }
     else
     {
-        P101_TRACK_POINTER_RESOURCE_ACQUIRE(env, "compiled-regex", preg, 0U, NULL);
+        P101_TRACK_POINTER_RESOURCE_ACQUIRE(env, P101_RESOURCE_CLASS_COMPILED_REGEX, preg, 0U, NULL);
     }
 
 done:
@@ -116,12 +117,9 @@ int p101_regexec(const struct p101_env *env, struct p101_error *err, const regex
 
 void p101_regfree(const struct p101_env *env, regex_t *preg)
 {
-    char resource_id[P101_ENV_POINTER_RESOURCE_ID_SIZE];
-
     P101_TRACE(env);
-    p101_env_pointer_resource_id(resource_id, sizeof(resource_id), preg);
     errno = 0;
     regfree(preg);
-    P101_TRACK_RESOURCE_RELEASE(env, "compiled-regex", resource_id, NULL);
+    P101_TRACK_POINTER_RESOURCE_RELEASE(env, P101_RESOURCE_CLASS_COMPILED_REGEX, preg, NULL);
     P101_TRACE_EXIT(env);
 }

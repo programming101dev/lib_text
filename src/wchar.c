@@ -15,6 +15,7 @@
  */
 
 #include "p101_text/p101_wchar.h"
+#include <p101_env/resource_classes.h>
 #include <p101_env/wrapper.h>
 
 /*
@@ -70,7 +71,7 @@ FILE *p101_open_wmemstream(const struct p101_env *env, struct p101_error *err, w
     }
     else
     {
-        P101_TRACK_POINTER_RESOURCE_ACQUIRE(env, "stdio-stream", ret_val, 0U, "open_wmemstream");
+        P101_TRACK_POINTER_RESOURCE_ACQUIRE(env, P101_RESOURCE_CLASS_STDIO_STREAM, ret_val, 0U, "open_wmemstream");
     }
 
     P101_WRAPPER_DONE(env);
