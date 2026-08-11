@@ -302,6 +302,10 @@ static void test_p101_wordexp(struct p101_env *env, struct p101_error *err)
                 }
                 p101_error_reset(native_err);
             }
+            if(native_result == 0)
+            {
+                wordfree(&native_argument_3);
+            }
             native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
         native_child_done_:
             p101_env_destroy(native_env);

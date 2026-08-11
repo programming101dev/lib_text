@@ -449,6 +449,11 @@ static void test_p101_open_wmemstream(struct p101_env *env, struct p101_error *e
                 }
                 p101_error_reset(native_err);
             }
+            if(native_result != NULL)
+            {
+                P101_NATIVE_CLEANUP_ERRNO(fclose(native_result));
+            }
+            free(native_argument_2);
             native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
         native_child_done_:
             p101_env_destroy(native_env);
@@ -713,6 +718,7 @@ static void test_p101_wcsdup(struct p101_env *env, struct p101_error *err)
                 }
                 p101_error_reset(native_err);
             }
+            free(native_result);
             native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
         native_child_done_:
             p101_env_destroy(native_env);
