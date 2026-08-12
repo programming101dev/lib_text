@@ -209,9 +209,48 @@ static void test_p101_regcomp(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {REG_BADBR, REG_BADPAT, REG_BADRPT, REG_EBRACE, REG_EBRACK, REG_ECOLLATE, REG_ECTYPE, REG_EEND, REG_EESCAPE, REG_EPAREN, REG_ERANGE, REG_ESIZE, REG_ESPACE, REG_ESUBREG};
     static const char *const error_names[] = {"REG_BADBR", "REG_BADPAT", "REG_BADRPT", "REG_EBRACE", "REG_EBRACK", "REG_ECOLLATE", "REG_ECTYPE", "REG_EEND", "REG_EESCAPE", "REG_EPAREN", "REG_ERANGE", "REG_ESIZE", "REG_ESPACE", "REG_ESUBREG"};
 #elif defined(__APPLE__)
-    static const int         errors[] = {REG_ASSERT, REG_BADBR, REG_BADMAX, REG_BADPAT, REG_BADRPT, REG_EBRACE, REG_EBRACK, REG_ECOLLATE, REG_ECTYPE, REG_EESCAPE, REG_EMPTY, REG_EPAREN, REG_ERANGE, REG_ESPACE, REG_ESUBREG, REG_ILLSEQ, REG_INVARG};
-    static const char *const error_names[] =
-        {"REG_ASSERT", "REG_BADBR", "REG_BADMAX", "REG_BADPAT", "REG_BADRPT", "REG_EBRACE", "REG_EBRACK", "REG_ECOLLATE", "REG_ECTYPE", "REG_EESCAPE", "REG_EMPTY", "REG_EPAREN", "REG_ERANGE", "REG_ESPACE", "REG_ESUBREG", "REG_ILLSEQ", "REG_INVARG"};
+    static const int errors[] = {
+        REG_ASSERT,
+        REG_BADBR,
+    #ifdef REG_BADMAX
+        REG_BADMAX,
+    #endif
+        REG_BADPAT,
+        REG_BADRPT,
+        REG_EBRACE,
+        REG_EBRACK,
+        REG_ECOLLATE,
+        REG_ECTYPE,
+        REG_EESCAPE,
+        REG_EMPTY,
+        REG_EPAREN,
+        REG_ERANGE,
+        REG_ESPACE,
+        REG_ESUBREG,
+        REG_ILLSEQ,
+        REG_INVARG,
+    };
+    static const char *const error_names[] = {
+        "REG_ASSERT",
+        "REG_BADBR",
+    #ifdef REG_BADMAX
+        "REG_BADMAX",
+    #endif
+        "REG_BADPAT",
+        "REG_BADRPT",
+        "REG_EBRACE",
+        "REG_EBRACK",
+        "REG_ECOLLATE",
+        "REG_ECTYPE",
+        "REG_EESCAPE",
+        "REG_EMPTY",
+        "REG_EPAREN",
+        "REG_ERANGE",
+        "REG_ESPACE",
+        "REG_ESUBREG",
+        "REG_ILLSEQ",
+        "REG_INVARG",
+    };
 #elif defined(__FreeBSD__)
     static const int         errors[] = {REG_ASSERT, REG_BADBR, REG_BADPAT, REG_BADRPT, REG_EBRACE, REG_EBRACK, REG_ECOLLATE, REG_ECTYPE, REG_EESCAPE, REG_EMPTY, REG_EPAREN, REG_ERANGE, REG_ESPACE, REG_ESUBREG, REG_ILLSEQ, REG_INVARG};
     static const char *const error_names[] =
@@ -346,9 +385,48 @@ static void test_p101_regexec(struct p101_env *env, struct p101_error *err)
     static const int         errors[]      = {EIO};
     static const char *const error_names[] = {"EIO"};
 #elif defined(__APPLE__)
-    static const int         errors[] = {REG_ASSERT, REG_BADBR, REG_BADMAX, REG_BADPAT, REG_BADRPT, REG_EBRACE, REG_EBRACK, REG_ECOLLATE, REG_ECTYPE, REG_EESCAPE, REG_EMPTY, REG_EPAREN, REG_ERANGE, REG_ESPACE, REG_ESUBREG, REG_ILLSEQ, REG_INVARG};
-    static const char *const error_names[] =
-        {"REG_ASSERT", "REG_BADBR", "REG_BADMAX", "REG_BADPAT", "REG_BADRPT", "REG_EBRACE", "REG_EBRACK", "REG_ECOLLATE", "REG_ECTYPE", "REG_EESCAPE", "REG_EMPTY", "REG_EPAREN", "REG_ERANGE", "REG_ESPACE", "REG_ESUBREG", "REG_ILLSEQ", "REG_INVARG"};
+    static const int errors[] = {
+        REG_ASSERT,
+        REG_BADBR,
+    #ifdef REG_BADMAX
+        REG_BADMAX,
+    #endif
+        REG_BADPAT,
+        REG_BADRPT,
+        REG_EBRACE,
+        REG_EBRACK,
+        REG_ECOLLATE,
+        REG_ECTYPE,
+        REG_EESCAPE,
+        REG_EMPTY,
+        REG_EPAREN,
+        REG_ERANGE,
+        REG_ESPACE,
+        REG_ESUBREG,
+        REG_ILLSEQ,
+        REG_INVARG,
+    };
+    static const char *const error_names[] = {
+        "REG_ASSERT",
+        "REG_BADBR",
+    #ifdef REG_BADMAX
+        "REG_BADMAX",
+    #endif
+        "REG_BADPAT",
+        "REG_BADRPT",
+        "REG_EBRACE",
+        "REG_EBRACK",
+        "REG_ECOLLATE",
+        "REG_ECTYPE",
+        "REG_EESCAPE",
+        "REG_EMPTY",
+        "REG_EPAREN",
+        "REG_ERANGE",
+        "REG_ESPACE",
+        "REG_ESUBREG",
+        "REG_ILLSEQ",
+        "REG_INVARG",
+    };
 #elif defined(__FreeBSD__)
     static const int         errors[] = {REG_ASSERT, REG_BADBR, REG_BADPAT, REG_BADRPT, REG_EBRACE, REG_EBRACK, REG_ECOLLATE, REG_ECTYPE, REG_EESCAPE, REG_EMPTY, REG_EPAREN, REG_ERANGE, REG_ESPACE, REG_ESUBREG, REG_ILLSEQ, REG_INVARG};
     static const char *const error_names[] =
