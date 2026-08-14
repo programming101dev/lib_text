@@ -35,34 +35,65 @@ static int failures;
 
 static void test_ctype(const struct p101_env *env, locale_t locale)
 {
+    int native_result;
+    int wrapper_result;
+
     /* P101_TEST_CASE(p101_isalnum_l) */
-    EXPECT(p101_isalnum_l(env, 'A', locale) == isalnum_l('A', locale));
+    wrapper_result = p101_isalnum_l(env, 'A', locale);
+    native_result  = (isalnum_l)('A', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_isalpha_l) */
-    EXPECT(p101_isalpha_l(env, 'A', locale) == isalpha_l('A', locale));
+    wrapper_result = p101_isalpha_l(env, 'A', locale);
+    native_result  = (isalpha_l)('A', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_isblank_l) */
-    EXPECT(p101_isblank_l(env, ' ', locale) == isblank_l(' ', locale));
+    wrapper_result = p101_isblank_l(env, ' ', locale);
+    native_result  = (isblank_l)(' ', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_iscntrl_l) */
-    EXPECT(p101_iscntrl_l(env, '\n', locale) == iscntrl_l('\n', locale));
+    wrapper_result = p101_iscntrl_l(env, '\n', locale);
+    native_result  = (iscntrl_l)('\n', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_isdigit_l) */
-    EXPECT(p101_isdigit_l(env, '7', locale) == isdigit_l('7', locale));
+    wrapper_result = p101_isdigit_l(env, '7', locale);
+    native_result  = (isdigit_l)('7', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_isgraph_l) */
-    EXPECT(p101_isgraph_l(env, 'A', locale) == isgraph_l('A', locale));
+    wrapper_result = p101_isgraph_l(env, 'A', locale);
+    native_result  = (isgraph_l)('A', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_islower_l) */
-    EXPECT(p101_islower_l(env, 'a', locale) == islower_l('a', locale));
+    wrapper_result = p101_islower_l(env, 'a', locale);
+    native_result  = (islower_l)('a', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_isprint_l) */
-    EXPECT(p101_isprint_l(env, 'A', locale) == isprint_l('A', locale));
+    wrapper_result = p101_isprint_l(env, 'A', locale);
+    native_result  = (isprint_l)('A', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_ispunct_l) */
-    EXPECT(p101_ispunct_l(env, '!', locale) == ispunct_l('!', locale));
+    wrapper_result = p101_ispunct_l(env, '!', locale);
+    native_result  = (ispunct_l)('!', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_isspace_l) */
-    EXPECT(p101_isspace_l(env, ' ', locale) == isspace_l(' ', locale));
+    wrapper_result = p101_isspace_l(env, ' ', locale);
+    native_result  = (isspace_l)(' ', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_isupper_l) */
-    EXPECT(p101_isupper_l(env, 'A', locale) == isupper_l('A', locale));
+    wrapper_result = p101_isupper_l(env, 'A', locale);
+    native_result  = (isupper_l)('A', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_isxdigit_l) */
-    EXPECT(p101_isxdigit_l(env, 'f', locale) == isxdigit_l('f', locale));
+    wrapper_result = p101_isxdigit_l(env, 'f', locale);
+    native_result  = (isxdigit_l)('f', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_tolower_l) */
-    EXPECT(p101_tolower_l(env, 'A', locale) == tolower_l('A', locale));
+    wrapper_result = p101_tolower_l(env, 'A', locale);
+    native_result  = (tolower_l)('A', locale);
+    EXPECT(wrapper_result == native_result);
     /* P101_TEST_CASE(p101_toupper_l) */
-    EXPECT(p101_toupper_l(env, 'a', locale) == toupper_l('a', locale));
+    wrapper_result = p101_toupper_l(env, 'a', locale);
+    native_result  = (toupper_l)('a', locale);
+    EXPECT(wrapper_result == native_result);
 }
 
 static void test_wctype(const struct p101_env *env, struct p101_error *err, locale_t locale)
