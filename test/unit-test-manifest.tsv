@@ -28,7 +28,7 @@ p101_wctype_l	c:@F@p101_wctype_l	fault	test/test_fault_wrappers_p101_text_wctype
 p101_wordexp	c:@F@p101_wordexp	fault	test/test_fault_wrappers_p101_text_wordexp.c
 p101_a64l	c:@F@p101_a64l	behavior	test/test_behavior.c
 p101_ffs	c:@F@p101_ffs	behavior	test/test_behavior.c
-p101_freelocale	c:@F@p101_freelocale	behavior	test/test_behavior.c
+p101_freelocale	c:@F@p101_freelocale	behavior-existing	test/locale/test_behavior.c
 p101_isalnum_l	c:@F@p101_isalnum_l	behavior	test/test_behavior.c
 p101_isalpha_l	c:@F@p101_isalpha_l	behavior	test/test_behavior.c
 p101_isblank_l	c:@F@p101_isblank_l	behavior	test/test_behavior.c
@@ -56,8 +56,8 @@ p101_iswxdigit_l	c:@F@p101_iswxdigit_l	behavior	test/test_behavior.c
 p101_isxdigit_l	c:@F@p101_isxdigit_l	behavior	test/test_behavior.c
 p101_l64a	c:@F@p101_l64a	behavior	test/test_behavior.c
 p101_memccpy	c:@F@p101_memccpy	behavior	test/test_behavior.c
-p101_nl_langinfo	c:@F@p101_nl_langinfo	behavior	test/test_behavior.c
-p101_nl_langinfo_l	c:@F@p101_nl_langinfo_l	behavior	test/test_behavior.c
+p101_nl_langinfo	c:@F@p101_nl_langinfo	behavior-existing	test/locale/test_behavior.c
+p101_nl_langinfo_l	c:@F@p101_nl_langinfo_l	behavior-existing	test/locale/test_behavior.c
 p101_regerror	c:@F@p101_regerror	behavior	test/test_behavior.c
 p101_regfree	c:@F@p101_regfree	behavior	test/test_behavior.c
 p101_rpmatch	c:@F@p101_rpmatch	behavior	test/test_behavior.c
