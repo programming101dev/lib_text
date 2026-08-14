@@ -10,6 +10,10 @@
 #include <netinet/in.h>
 #include <p101_env/env.h>
 #include <p101_error/error.h>
+#include <p101_locale/p101_iconv.h>
+#include <p101_locale/p101_langinfo.h>
+#include <p101_locale/p101_locale.h>
+#include <p101_locale/p101_nl_types.h>
 #include <p101_text/p101_ctype.h>
 #include <p101_text/p101_regex.h>
 #include <p101_text/p101_stdlib.h>
@@ -198,21 +202,37 @@ static void count_resource_event(const struct p101_env *env, p101_env_resource_k
     fault_resource_events++;
 }
 
-/* P101_TEST_CASE(p101_towctrans_l) */
-static void test_p101_towctrans_l(struct p101_env *env, struct p101_error *err)
+/* P101_TEST_CASE(p101_iconv) */
+static void test_p101_iconv(struct p101_env *env, struct p101_error *err)
 {
+    char         *argument_3[4];
+    unsigned char argument_3_before[sizeof(argument_3)];
+    memset(argument_3, 0xA5, sizeof(argument_3));
+    memcpy(argument_3_before, argument_3, sizeof(argument_3));
+    size_t        argument_4[4];
+    unsigned char argument_4_before[sizeof(argument_4)];
+    memset(argument_4, 0xA5, sizeof(argument_4));
+    memcpy(argument_4_before, argument_4, sizeof(argument_4));
+    char         *argument_5[4];
+    unsigned char argument_5_before[sizeof(argument_5)];
+    memset(argument_5, 0xA5, sizeof(argument_5));
+    memcpy(argument_5_before, argument_5, sizeof(argument_5));
+    size_t        argument_6[4];
+    unsigned char argument_6_before[sizeof(argument_6)];
+    memset(argument_6, 0xA5, sizeof(argument_6));
+    memcpy(argument_6_before, argument_6, sizeof(argument_6));
 #ifdef __linux__
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
+    static const int         errors[]      = {E2BIG, EILSEQ, EINVAL};
+    static const char *const error_names[] = {"E2BIG", "EILSEQ", "EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
+    static const int         errors[]      = {E2BIG, EBADF, EILSEQ, EINVAL};
+    static const char *const error_names[] = {"E2BIG", "EBADF", "EILSEQ", "EINVAL"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
+    static const int         errors[]      = {E2BIG, EBADF, EILSEQ, EINVAL};
+    static const char *const error_names[] = {"E2BIG", "EBADF", "EILSEQ", "EINVAL"};
 #else
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
+    static const int         errors[]      = {E2BIG, EBADF, EILSEQ, EINVAL};
+    static const char *const error_names[] = {"E2BIG", "EBADF", "EILSEQ", "EINVAL"};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -225,14 +245,18 @@ static void test_p101_towctrans_l(struct p101_env *env, struct p101_error *err)
         fault_resource_events = 0U;
         errno                 = P101_TEST_ERRNO_SENTINEL;
         p101_env_set_fault_injector(env, fail_next_call, &state);
-        wint_t result = p101_towctrans_l(env, err, 0, 0, (locale_t){0});
+        size_t result = p101_iconv(env, err, (iconv_t){0}, argument_3, argument_4, argument_5, argument_6);
         (void)result;
         EXPECT(state.checks == 1);
         EXPECT(p101_error_is_errno(err, state.code));
         EXPECT(errno == P101_TEST_ERRNO_SENTINEL);
-        EXPECT(result == (WEOF));
+        EXPECT(result == ((size_t)-1));
+        EXPECT(memcmp(argument_3, argument_3_before, sizeof(argument_3)) == 0);
+        EXPECT(memcmp(argument_4, argument_4_before, sizeof(argument_4)) == 0);
+        EXPECT(memcmp(argument_5, argument_5_before, sizeof(argument_5)) == 0);
+        EXPECT(memcmp(argument_6, argument_6_before, sizeof(argument_6)) == 0);
         EXPECT(fault_resource_events == 0U);
-        write_outcome("p101_towctrans_l", "errno", error_names[index], state.code, failures == failures_before);
+        write_outcome("p101_iconv", "errno", error_names[index], state.code, failures == failures_before);
         p101_error_reset(err);
     }
     p101_env_set_fault_injector(env, NULL, NULL);
@@ -276,14 +300,18 @@ static void test_p101_towctrans_l(struct p101_env *env, struct p101_error *err)
                 native_child_status = 77;
                 goto native_child_done_;
             }
-            locale_t native_argument_4;
-            native_argument_4 = newlocale(LC_ALL_MASK, "C", (locale_t)0);
-            if(native_argument_4 == (locale_t)0)
+            iconv_t native_argument_2;
+            native_argument_2 = p101_iconv_open(native_env, native_err, "UTF-8", "UTF-8");
+            if(native_argument_2 == (iconv_t)-1)
             {
                 native_child_status = 77;
                 goto native_child_done_;
             }
-            wint_t native_result = p101_towctrans_l(native_env, native_err, 0, 0, native_argument_4);
+            char  *native_argument_3 = NULL;
+            size_t native_argument_4 = {0};
+            char  *native_argument_5 = NULL;
+            size_t native_argument_6 = {0};
+            size_t native_result     = p101_iconv(native_env, native_err, native_argument_2, &native_argument_3, &native_argument_4, &native_argument_5, &native_argument_6);
             (void)native_result;
             if(p101_error_has_error(native_err))
             {
@@ -298,12 +326,17 @@ static void test_p101_towctrans_l(struct p101_env *env, struct p101_error *err)
                 }
                 if(!native_error_declared)
                 {
-                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_towctrans_l: %s\n", p101_error_get_message(native_err));
+                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_iconv: %s\n", p101_error_get_message(native_err));
                     native_passed = false;
                 }
                 p101_error_reset(native_err);
             }
-            freelocale(native_argument_4);
+            if(p101_iconv_close(native_env, native_err, native_argument_2) != 0)
+            {
+                fprintf(stderr, "native cleanup failed: p101_iconv: p101_iconv_close: %s\n", p101_error_get_message(native_err));
+                native_passed = false;
+                p101_error_reset(native_err);
+            }
             native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
         native_child_done_:
             p101_env_destroy(native_env);
@@ -314,18 +347,18 @@ static void test_p101_towctrans_l(struct p101_env *env, struct p101_error *err)
             EXPECT(native_waitpid_nointr(native_pid, &native_status) == native_pid);
             if(WIFSIGNALED(native_status))
             {
-                fprintf(stderr, "native smoke terminated by signal: p101_towctrans_l: %d\n", WTERMSIG(native_status));
+                fprintf(stderr, "native smoke terminated by signal: p101_iconv: %d\n", WTERMSIG(native_status));
             }
             EXPECT(WIFEXITED(native_status));
             if(WIFEXITED(native_status) && WEXITSTATUS(native_status) == 77)
             {
-                fprintf(stderr, "native smoke fixture unavailable: p101_towctrans_l\n");
+                fprintf(stderr, "native smoke fixture unavailable: p101_iconv\n");
             }
             else if(WIFEXITED(native_status))
             {
                 if(WEXITSTATUS(native_status) != EXIT_SUCCESS)
                 {
-                    fprintf(stderr, "native smoke exited unsuccessfully: p101_towctrans_l: %d\n", WEXITSTATUS(native_status));
+                    fprintf(stderr, "native smoke exited unsuccessfully: p101_iconv: %d\n", WEXITSTATUS(native_status));
                 }
                 EXPECT(WEXITSTATUS(native_status) == EXIT_SUCCESS);
             }
@@ -334,21 +367,21 @@ static void test_p101_towctrans_l(struct p101_env *env, struct p101_error *err)
     }
 }
 
-/* P101_TEST_CASE(p101_wctrans_l) */
-static void test_p101_wctrans_l(struct p101_env *env, struct p101_error *err)
+/* P101_TEST_CASE(p101_iconv_close) */
+static void test_p101_iconv_close(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
+    static const int         errors[]      = {EBADF};
+    static const char *const error_names[] = {"EBADF"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
+    static const int         errors[]      = {EBADF};
+    static const char *const error_names[] = {"EBADF"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
+    static const int         errors[]      = {EBADF};
+    static const char *const error_names[] = {"EBADF"};
 #else
-    static const int         errors[]      = {EINVAL};
-    static const char *const error_names[] = {"EINVAL"};
+    static const int         errors[]      = {EBADF};
+    static const char *const error_names[] = {"EBADF"};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -361,15 +394,14 @@ static void test_p101_wctrans_l(struct p101_env *env, struct p101_error *err)
         fault_resource_events = 0U;
         errno                 = P101_TEST_ERRNO_SENTINEL;
         p101_env_set_fault_injector(env, fail_next_call, &state);
-        wctrans_t result = p101_wctrans_l(env, err, NULL, (locale_t){0});
+        int result = p101_iconv_close(env, err, (iconv_t){0});
         (void)result;
         EXPECT(state.checks == 1);
         EXPECT(p101_error_is_errno(err, state.code));
         EXPECT(errno == P101_TEST_ERRNO_SENTINEL);
-        static wctrans_t expected_failure;
-        EXPECT(result == expected_failure);
+        EXPECT(result == (-1));
         EXPECT(fault_resource_events == 0U);
-        write_outcome("p101_wctrans_l", "errno", error_names[index], state.code, failures == failures_before);
+        write_outcome("p101_iconv_close", "errno", error_names[index], state.code, failures == failures_before);
         p101_error_reset(err);
     }
     p101_env_set_fault_injector(env, NULL, NULL);
@@ -413,14 +445,14 @@ static void test_p101_wctrans_l(struct p101_env *env, struct p101_error *err)
                 native_child_status = 77;
                 goto native_child_done_;
             }
-            locale_t native_argument_3;
-            native_argument_3 = newlocale(LC_ALL_MASK, "C", (locale_t)0);
-            if(native_argument_3 == (locale_t)0)
+            iconv_t native_argument_2;
+            native_argument_2 = p101_iconv_open(native_env, native_err, "UTF-8", "UTF-8");
+            if(native_argument_2 == (iconv_t)-1)
             {
                 native_child_status = 77;
                 goto native_child_done_;
             }
-            wctrans_t native_result = p101_wctrans_l(native_env, native_err, "p101", native_argument_3);
+            int native_result = p101_iconv_close(native_env, native_err, native_argument_2);
             (void)native_result;
             if(p101_error_has_error(native_err))
             {
@@ -435,12 +467,11 @@ static void test_p101_wctrans_l(struct p101_env *env, struct p101_error *err)
                 }
                 if(!native_error_declared)
                 {
-                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_wctrans_l: %s\n", p101_error_get_message(native_err));
+                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_iconv_close: %s\n", p101_error_get_message(native_err));
                     native_passed = false;
                 }
                 p101_error_reset(native_err);
             }
-            freelocale(native_argument_3);
             native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
         native_child_done_:
             p101_env_destroy(native_env);
@@ -451,18 +482,18 @@ static void test_p101_wctrans_l(struct p101_env *env, struct p101_error *err)
             EXPECT(native_waitpid_nointr(native_pid, &native_status) == native_pid);
             if(WIFSIGNALED(native_status))
             {
-                fprintf(stderr, "native smoke terminated by signal: p101_wctrans_l: %d\n", WTERMSIG(native_status));
+                fprintf(stderr, "native smoke terminated by signal: p101_iconv_close: %d\n", WTERMSIG(native_status));
             }
             EXPECT(WIFEXITED(native_status));
             if(WIFEXITED(native_status) && WEXITSTATUS(native_status) == 77)
             {
-                fprintf(stderr, "native smoke fixture unavailable: p101_wctrans_l\n");
+                fprintf(stderr, "native smoke fixture unavailable: p101_iconv_close\n");
             }
             else if(WIFEXITED(native_status))
             {
                 if(WEXITSTATUS(native_status) != EXIT_SUCCESS)
                 {
-                    fprintf(stderr, "native smoke exited unsuccessfully: p101_wctrans_l: %d\n", WEXITSTATUS(native_status));
+                    fprintf(stderr, "native smoke exited unsuccessfully: p101_iconv_close: %d\n", WEXITSTATUS(native_status));
                 }
                 EXPECT(WEXITSTATUS(native_status) == EXIT_SUCCESS);
             }
@@ -471,21 +502,21 @@ static void test_p101_wctrans_l(struct p101_env *env, struct p101_error *err)
     }
 }
 
-/* P101_TEST_CASE(p101_wctype_l) */
-static void test_p101_wctype_l(struct p101_env *env, struct p101_error *err)
+/* P101_TEST_CASE(p101_iconv_open) */
+static void test_p101_iconv_open(struct p101_env *env, struct p101_error *err)
 {
 #ifdef __linux__
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL, EMFILE, ENFILE, ENOMEM};
+    static const char *const error_names[] = {"EINVAL", "EMFILE", "ENFILE", "ENOMEM"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL, ENOMEM};
+    static const char *const error_names[] = {"EINVAL", "ENOMEM"};
 #else
-    static const int         errors[]      = {EIO};
-    static const char *const error_names[] = {"EIO"};
+    static const int         errors[]      = {EINVAL, EMFILE, ENFILE, ENOMEM};
+    static const char *const error_names[] = {"EINVAL", "EMFILE", "ENFILE", "ENOMEM"};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -498,14 +529,14 @@ static void test_p101_wctype_l(struct p101_env *env, struct p101_error *err)
         fault_resource_events = 0U;
         errno                 = P101_TEST_ERRNO_SENTINEL;
         p101_env_set_fault_injector(env, fail_next_call, &state);
-        wctype_t result = p101_wctype_l(env, err, NULL, (locale_t){0});
+        iconv_t result = p101_iconv_open(env, err, NULL, NULL);
         (void)result;
         EXPECT(state.checks == 1);
         EXPECT(p101_error_is_errno(err, state.code));
         EXPECT(errno == P101_TEST_ERRNO_SENTINEL);
-        EXPECT(result == (0));
+        EXPECT(result == ((iconv_t)-1));
         EXPECT(fault_resource_events == 0U);
-        write_outcome("p101_wctype_l", "errno", error_names[index], state.code, failures == failures_before);
+        write_outcome("p101_iconv_open", "errno", error_names[index], state.code, failures == failures_before);
         p101_error_reset(err);
     }
     p101_env_set_fault_injector(env, NULL, NULL);
@@ -549,14 +580,7 @@ static void test_p101_wctype_l(struct p101_env *env, struct p101_error *err)
                 native_child_status = 77;
                 goto native_child_done_;
             }
-            locale_t native_argument_3;
-            native_argument_3 = newlocale(LC_ALL_MASK, "C", (locale_t)0);
-            if(native_argument_3 == (locale_t)0)
-            {
-                native_child_status = 77;
-                goto native_child_done_;
-            }
-            wctype_t native_result = p101_wctype_l(native_env, native_err, "alpha", native_argument_3);
+            iconv_t native_result = p101_iconv_open(native_env, native_err, "UTF-8", "UTF-8");
             (void)native_result;
             if(p101_error_has_error(native_err))
             {
@@ -571,12 +595,20 @@ static void test_p101_wctype_l(struct p101_env *env, struct p101_error *err)
                 }
                 if(!native_error_declared)
                 {
-                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_wctype_l: %s\n", p101_error_get_message(native_err));
+                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_iconv_open: %s\n", p101_error_get_message(native_err));
                     native_passed = false;
                 }
                 p101_error_reset(native_err);
             }
-            freelocale(native_argument_3);
+            if(native_result != (iconv_t)-1)
+            {
+                if(p101_iconv_close(native_env, native_err, native_result) != 0)
+                {
+                    fprintf(stderr, "native cleanup failed: p101_iconv_open: p101_iconv_close: %s\n", p101_error_get_message(native_err));
+                    native_passed = false;
+                    p101_error_reset(native_err);
+                }
+            }
             native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
         native_child_done_:
             p101_env_destroy(native_env);
@@ -587,18 +619,18 @@ static void test_p101_wctype_l(struct p101_env *env, struct p101_error *err)
             EXPECT(native_waitpid_nointr(native_pid, &native_status) == native_pid);
             if(WIFSIGNALED(native_status))
             {
-                fprintf(stderr, "native smoke terminated by signal: p101_wctype_l: %d\n", WTERMSIG(native_status));
+                fprintf(stderr, "native smoke terminated by signal: p101_iconv_open: %d\n", WTERMSIG(native_status));
             }
             EXPECT(WIFEXITED(native_status));
             if(WIFEXITED(native_status) && WEXITSTATUS(native_status) == 77)
             {
-                fprintf(stderr, "native smoke fixture unavailable: p101_wctype_l\n");
+                fprintf(stderr, "native smoke fixture unavailable: p101_iconv_open\n");
             }
             else if(WIFEXITED(native_status))
             {
                 if(WEXITSTATUS(native_status) != EXIT_SUCCESS)
                 {
-                    fprintf(stderr, "native smoke exited unsuccessfully: p101_wctype_l: %d\n", WEXITSTATUS(native_status));
+                    fprintf(stderr, "native smoke exited unsuccessfully: p101_iconv_open: %d\n", WEXITSTATUS(native_status));
                 }
                 EXPECT(WEXITSTATUS(native_status) == EXIT_SUCCESS);
             }
@@ -643,15 +675,15 @@ int main(void)
         p101_env_set_resource_observer(env, count_resource_event, NULL);
         if(!native_child_process)
         {
-            test_p101_towctrans_l(env, err);
+            test_p101_iconv(env, err);
         }
         if(!native_child_process)
         {
-            test_p101_wctrans_l(env, err);
+            test_p101_iconv_close(env, err);
         }
         if(!native_child_process)
         {
-            test_p101_wctype_l(env, err);
+            test_p101_iconv_open(env, err);
         }
     }
     p101_env_destroy(env);

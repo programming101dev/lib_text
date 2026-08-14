@@ -10,6 +10,10 @@
 #include <netinet/in.h>
 #include <p101_env/env.h>
 #include <p101_error/error.h>
+#include <p101_locale/p101_iconv.h>
+#include <p101_locale/p101_langinfo.h>
+#include <p101_locale/p101_locale.h>
+#include <p101_locale/p101_nl_types.h>
 #include <p101_text/p101_ctype.h>
 #include <p101_text/p101_regex.h>
 #include <p101_text/p101_stdlib.h>
@@ -198,25 +202,21 @@ static void count_resource_event(const struct p101_env *env, p101_env_resource_k
     fault_resource_events++;
 }
 
-/* P101_TEST_CASE(p101_wordexp) */
-static void test_p101_wordexp(struct p101_env *env, struct p101_error *err)
+/* P101_TEST_CASE(p101_duplocale) */
+static void test_p101_duplocale(struct p101_env *env, struct p101_error *err)
 {
-    wordexp_t     argument_3[4];
-    unsigned char argument_3_before[sizeof(argument_3)];
-    memset(argument_3, 0xA5, sizeof(argument_3));
-    memcpy(argument_3_before, argument_3, sizeof(argument_3));
 #ifdef __linux__
-    static const int         errors[]      = {WRDE_BADCHAR, WRDE_BADVAL, WRDE_CMDSUB, WRDE_NOSPACE, WRDE_SYNTAX};
-    static const char *const error_names[] = {"WRDE_BADCHAR", "WRDE_BADVAL", "WRDE_CMDSUB", "WRDE_NOSPACE", "WRDE_SYNTAX"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #elif defined(__APPLE__)
-    static const int         errors[]      = {WRDE_BADCHAR, WRDE_BADVAL, WRDE_CMDSUB, WRDE_NOSPACE, WRDE_SYNTAX};
-    static const char *const error_names[] = {"WRDE_BADCHAR", "WRDE_BADVAL", "WRDE_CMDSUB", "WRDE_NOSPACE", "WRDE_SYNTAX"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #elif defined(__FreeBSD__)
-    static const int         errors[]      = {WRDE_BADCHAR, WRDE_BADVAL, WRDE_CMDSUB, WRDE_NOSPACE, WRDE_SYNTAX};
-    static const char *const error_names[] = {"WRDE_BADCHAR", "WRDE_BADVAL", "WRDE_CMDSUB", "WRDE_NOSPACE", "WRDE_SYNTAX"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #else
-    static const int         errors[]      = {WRDE_BADCHAR, WRDE_BADVAL, WRDE_CMDSUB, WRDE_NOSPACE, WRDE_SYNTAX};
-    static const char *const error_names[] = {"WRDE_BADCHAR", "WRDE_BADVAL", "WRDE_CMDSUB", "WRDE_NOSPACE", "WRDE_SYNTAX"};
+    static const int         errors[]      = {ENOMEM};
+    static const char *const error_names[] = {"ENOMEM"};
 #endif
 
     for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
@@ -229,15 +229,14 @@ static void test_p101_wordexp(struct p101_env *env, struct p101_error *err)
         fault_resource_events = 0U;
         errno                 = P101_TEST_ERRNO_SENTINEL;
         p101_env_set_fault_injector(env, fail_next_call, &state);
-        int result = p101_wordexp(env, err, NULL, argument_3, 0);
+        locale_t result = p101_duplocale(env, err, (locale_t){0});
         (void)result;
         EXPECT(state.checks == 1);
-        EXPECT(p101_error_is_error(err, P101_ERROR_SYSTEM, state.code));
+        EXPECT(p101_error_is_errno(err, state.code));
         EXPECT(errno == P101_TEST_ERRNO_SENTINEL);
-        EXPECT(result == state.code);
-        EXPECT(memcmp(argument_3, argument_3_before, sizeof(argument_3)) == 0);
+        EXPECT(result == ((locale_t)0));
         EXPECT(fault_resource_events == 0U);
-        write_outcome("p101_wordexp", "system", error_names[index], state.code, failures == failures_before);
+        write_outcome("p101_duplocale", "errno", error_names[index], state.code, failures == failures_before);
         p101_error_reset(err);
     }
     p101_env_set_fault_injector(env, NULL, NULL);
@@ -281,8 +280,14 @@ static void test_p101_wordexp(struct p101_env *env, struct p101_error *err)
                 native_child_status = 77;
                 goto native_child_done_;
             }
-            wordexp_t native_argument_3 = {0};
-            int       native_result     = p101_wordexp(native_env, native_err, "p101", &native_argument_3, 0);
+            locale_t native_argument_2;
+            native_argument_2 = newlocale(LC_ALL_MASK, "C", (locale_t)0);
+            if(native_argument_2 == (locale_t)0)
+            {
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            locale_t native_result = p101_duplocale(native_env, native_err, native_argument_2);
             (void)native_result;
             if(p101_error_has_error(native_err))
             {
@@ -297,15 +302,12 @@ static void test_p101_wordexp(struct p101_env *env, struct p101_error *err)
                 }
                 if(!native_error_declared)
                 {
-                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_wordexp: %s\n", p101_error_get_message(native_err));
+                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_duplocale: %s\n", p101_error_get_message(native_err));
                     native_passed = false;
                 }
                 p101_error_reset(native_err);
             }
-            if(native_result == 0)
-            {
-                wordfree(&native_argument_3);
-            }
+            freelocale(native_argument_2);
             native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
         native_child_done_:
             p101_env_destroy(native_env);
@@ -316,18 +318,290 @@ static void test_p101_wordexp(struct p101_env *env, struct p101_error *err)
             EXPECT(native_waitpid_nointr(native_pid, &native_status) == native_pid);
             if(WIFSIGNALED(native_status))
             {
-                fprintf(stderr, "native smoke terminated by signal: p101_wordexp: %d\n", WTERMSIG(native_status));
+                fprintf(stderr, "native smoke terminated by signal: p101_duplocale: %d\n", WTERMSIG(native_status));
             }
             EXPECT(WIFEXITED(native_status));
             if(WIFEXITED(native_status) && WEXITSTATUS(native_status) == 77)
             {
-                fprintf(stderr, "native smoke fixture unavailable: p101_wordexp\n");
+                fprintf(stderr, "native smoke fixture unavailable: p101_duplocale\n");
             }
             else if(WIFEXITED(native_status))
             {
                 if(WEXITSTATUS(native_status) != EXIT_SUCCESS)
                 {
-                    fprintf(stderr, "native smoke exited unsuccessfully: p101_wordexp: %d\n", WEXITSTATUS(native_status));
+                    fprintf(stderr, "native smoke exited unsuccessfully: p101_duplocale: %d\n", WEXITSTATUS(native_status));
+                }
+                EXPECT(WEXITSTATUS(native_status) == EXIT_SUCCESS);
+            }
+        }
+        p101_error_reset(err);
+    }
+}
+
+/* P101_TEST_CASE(p101_newlocale) */
+static void test_p101_newlocale(struct p101_env *env, struct p101_error *err)
+{
+#ifdef __linux__
+    static const int         errors[]      = {EINVAL, ENOENT, ENOMEM};
+    static const char *const error_names[] = {"EINVAL", "ENOENT", "ENOMEM"};
+#elif defined(__APPLE__)
+    static const int         errors[]      = {EINVAL, ENOENT, ENOMEM};
+    static const char *const error_names[] = {"EINVAL", "ENOENT", "ENOMEM"};
+#elif defined(__FreeBSD__)
+    static const int         errors[]      = {EINVAL, ENOENT, ENOMEM};
+    static const char *const error_names[] = {"EINVAL", "ENOENT", "ENOMEM"};
+#else
+    static const int         errors[]      = {EINVAL, ENOENT, ENOMEM};
+    static const char *const error_names[] = {"EINVAL", "ENOENT", "ENOMEM"};
+#endif
+
+    for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
+    {
+        struct fault_state state = {0, errors[index]};
+        int                failures_before;
+
+        failures_before = failures;
+        EXPECT(p101_error_has_no_error(err));
+        fault_resource_events = 0U;
+        errno                 = P101_TEST_ERRNO_SENTINEL;
+        p101_env_set_fault_injector(env, fail_next_call, &state);
+        locale_t result = p101_newlocale(env, err, 0, NULL, (locale_t){0});
+        (void)result;
+        EXPECT(state.checks == 1);
+        EXPECT(p101_error_is_errno(err, state.code));
+        EXPECT(errno == P101_TEST_ERRNO_SENTINEL);
+        EXPECT(result == ((locale_t)0));
+        EXPECT(fault_resource_events == 0U);
+        write_outcome("p101_newlocale", "errno", error_names[index], state.code, failures == failures_before);
+        p101_error_reset(err);
+    }
+    p101_env_set_fault_injector(env, NULL, NULL);
+    {
+        int   native_status = 0;
+        pid_t native_pid    = fork();
+
+        EXPECT(native_pid >= 0);
+        if(native_pid == 0)
+        {
+            bool               native_passed = true;
+            struct p101_error *native_err    = NULL;
+            struct p101_env   *native_env    = NULL;
+            FILE              *native_stdin_result;
+
+            native_child_process = true;
+            failures             = 0;
+            (void)alarm(2U);
+            if(unsetenv("P101_CALL_LOG") != 0 || unsetenv("P101_RESOURCE_LOG") != 0)
+            {
+                fprintf(stderr, "native setup failed: cannot clear p101 logging environment\n");
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            native_stdin_result = freopen("/dev/null", "r", stdin);
+            if(native_stdin_result == NULL)
+            {
+                fprintf(stderr, "native setup failed: cannot make standard input deterministic\n");
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            native_err = p101_error_create(false);
+            if(native_err == NULL)
+            {
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            native_env = p101_env_create(native_err, NULL);
+            if(native_env == NULL)
+            {
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            locale_t native_argument_4;
+            native_argument_4 = newlocale(LC_ALL_MASK, "C", (locale_t)0);
+            if(native_argument_4 == (locale_t)0)
+            {
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            locale_t native_result = p101_newlocale(native_env, native_err, 0, "p101", native_argument_4);
+            (void)native_result;
+            if(p101_error_has_error(native_err))
+            {
+                bool native_error_declared = false;
+
+                for(size_t native_error_index = 0U; native_error_index < sizeof(errors) / sizeof(errors[0]); native_error_index++)
+                {
+                    if(p101_error_is_errno(native_err, errors[native_error_index]))
+                    {
+                        native_error_declared = true;
+                    }
+                }
+                if(!native_error_declared)
+                {
+                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_newlocale: %s\n", p101_error_get_message(native_err));
+                    native_passed = false;
+                }
+                p101_error_reset(native_err);
+            }
+            freelocale(native_argument_4);
+            native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
+        native_child_done_:
+            p101_env_destroy(native_env);
+            p101_error_destroy(native_err);
+        }
+        if(native_pid > 0)
+        {
+            EXPECT(native_waitpid_nointr(native_pid, &native_status) == native_pid);
+            if(WIFSIGNALED(native_status))
+            {
+                fprintf(stderr, "native smoke terminated by signal: p101_newlocale: %d\n", WTERMSIG(native_status));
+            }
+            EXPECT(WIFEXITED(native_status));
+            if(WIFEXITED(native_status) && WEXITSTATUS(native_status) == 77)
+            {
+                fprintf(stderr, "native smoke fixture unavailable: p101_newlocale\n");
+            }
+            else if(WIFEXITED(native_status))
+            {
+                if(WEXITSTATUS(native_status) != EXIT_SUCCESS)
+                {
+                    fprintf(stderr, "native smoke exited unsuccessfully: p101_newlocale: %d\n", WEXITSTATUS(native_status));
+                }
+                EXPECT(WEXITSTATUS(native_status) == EXIT_SUCCESS);
+            }
+        }
+        p101_error_reset(err);
+    }
+}
+
+/* P101_TEST_CASE(p101_uselocale) */
+static void test_p101_uselocale(struct p101_env *env, struct p101_error *err)
+{
+#ifdef __linux__
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
+#elif defined(__APPLE__)
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
+#elif defined(__FreeBSD__)
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
+#else
+    static const int         errors[]      = {EINVAL};
+    static const char *const error_names[] = {"EINVAL"};
+#endif
+
+    for(size_t index = 0U; index < sizeof(errors) / sizeof(errors[0]); index++)
+    {
+        struct fault_state state = {0, errors[index]};
+        int                failures_before;
+
+        failures_before = failures;
+        EXPECT(p101_error_has_no_error(err));
+        fault_resource_events = 0U;
+        errno                 = P101_TEST_ERRNO_SENTINEL;
+        p101_env_set_fault_injector(env, fail_next_call, &state);
+        locale_t result = p101_uselocale(env, err, (locale_t){0});
+        (void)result;
+        EXPECT(state.checks == 1);
+        EXPECT(p101_error_is_errno(err, state.code));
+        EXPECT(errno == P101_TEST_ERRNO_SENTINEL);
+        EXPECT(result == ((locale_t)0));
+        EXPECT(fault_resource_events == 0U);
+        write_outcome("p101_uselocale", "errno", error_names[index], state.code, failures == failures_before);
+        p101_error_reset(err);
+    }
+    p101_env_set_fault_injector(env, NULL, NULL);
+    {
+        int   native_status = 0;
+        pid_t native_pid    = fork();
+
+        EXPECT(native_pid >= 0);
+        if(native_pid == 0)
+        {
+            bool               native_passed = true;
+            struct p101_error *native_err    = NULL;
+            struct p101_env   *native_env    = NULL;
+            FILE              *native_stdin_result;
+
+            native_child_process = true;
+            failures             = 0;
+            (void)alarm(2U);
+            if(unsetenv("P101_CALL_LOG") != 0 || unsetenv("P101_RESOURCE_LOG") != 0)
+            {
+                fprintf(stderr, "native setup failed: cannot clear p101 logging environment\n");
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            native_stdin_result = freopen("/dev/null", "r", stdin);
+            if(native_stdin_result == NULL)
+            {
+                fprintf(stderr, "native setup failed: cannot make standard input deterministic\n");
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            native_err = p101_error_create(false);
+            if(native_err == NULL)
+            {
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            native_env = p101_env_create(native_err, NULL);
+            if(native_env == NULL)
+            {
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            locale_t native_argument_2;
+            native_argument_2 = newlocale(LC_ALL_MASK, "C", (locale_t)0);
+            if(native_argument_2 == (locale_t)0)
+            {
+                native_child_status = 77;
+                goto native_child_done_;
+            }
+            locale_t native_result = p101_uselocale(native_env, native_err, native_argument_2);
+            (void)native_result;
+            if(p101_error_has_error(native_err))
+            {
+                bool native_error_declared = false;
+
+                for(size_t native_error_index = 0U; native_error_index < sizeof(errors) / sizeof(errors[0]); native_error_index++)
+                {
+                    if(p101_error_is_errno(native_err, errors[native_error_index]))
+                    {
+                        native_error_declared = true;
+                    }
+                }
+                if(!native_error_declared)
+                {
+                    fprintf(stderr, "native smoke produced an undeclared platform failure: p101_uselocale: %s\n", p101_error_get_message(native_err));
+                    native_passed = false;
+                }
+                p101_error_reset(native_err);
+            }
+            freelocale(native_argument_2);
+            native_child_status = native_passed ? EXIT_SUCCESS : EXIT_FAILURE;
+        native_child_done_:
+            p101_env_destroy(native_env);
+            p101_error_destroy(native_err);
+        }
+        if(native_pid > 0)
+        {
+            EXPECT(native_waitpid_nointr(native_pid, &native_status) == native_pid);
+            if(WIFSIGNALED(native_status))
+            {
+                fprintf(stderr, "native smoke terminated by signal: p101_uselocale: %d\n", WTERMSIG(native_status));
+            }
+            EXPECT(WIFEXITED(native_status));
+            if(WIFEXITED(native_status) && WEXITSTATUS(native_status) == 77)
+            {
+                fprintf(stderr, "native smoke fixture unavailable: p101_uselocale\n");
+            }
+            else if(WIFEXITED(native_status))
+            {
+                if(WEXITSTATUS(native_status) != EXIT_SUCCESS)
+                {
+                    fprintf(stderr, "native smoke exited unsuccessfully: p101_uselocale: %d\n", WEXITSTATUS(native_status));
                 }
                 EXPECT(WEXITSTATUS(native_status) == EXIT_SUCCESS);
             }
@@ -372,7 +646,15 @@ int main(void)
         p101_env_set_resource_observer(env, count_resource_event, NULL);
         if(!native_child_process)
         {
-            test_p101_wordexp(env, err);
+            test_p101_duplocale(env, err);
+        }
+        if(!native_child_process)
+        {
+            test_p101_newlocale(env, err);
+        }
+        if(!native_child_process)
+        {
+            test_p101_uselocale(env, err);
         }
     }
     p101_env_destroy(env);

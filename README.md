@@ -1,5 +1,10 @@
 # lib_text
 
+The repository owns two narrow targets. `p101_text` mirrors text, pattern,
+regular-expression, and wide-character APIs. `p101_locale` mirrors locale,
+message-catalog, language-information, and character-conversion APIs. The
+targets remain separate so plain text consumers do not acquire `iconv`.
+
 Strings, wide text, patterns, regular expressions, and word expansion for the p101 portable systems subset.
 
 The public API is the intersection implemented on Linux, macOS, and FreeBSD.
